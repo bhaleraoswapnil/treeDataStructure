@@ -61,8 +61,8 @@ void Tree::preOrder(Node *root)
         return;
     }
     cout << root->data << " ";
-    inOrder(root->left);
-    inOrder(root->right);
+    preOrder(root->left);
+    preOrder(root->right);
 }
 
 void Tree::postOrder(Node *root)
@@ -71,8 +71,8 @@ void Tree::postOrder(Node *root)
     {
         return;
     }
-    inOrder(root->left);
-    inOrder(root->right);
+    postOrder(root->left);
+    postOrder(root->right);
     cout << root->data << " ";
 }
 
