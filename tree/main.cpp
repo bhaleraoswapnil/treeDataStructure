@@ -3,7 +3,7 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Size of Binary Tree
+//  Question: Height of Binary Tree
 
 #include <iostream>
 using namespace std;
@@ -27,7 +27,7 @@ public:
     Node *getRoot() { return mpRoot; }
     void inOrder(Node *);
     void createTree();
-    int sizeofTree(Node *);
+    int heightofTree(Node *);
 };
 Tree::Tree() : mpRoot(nullptr)
 {
@@ -54,13 +54,13 @@ void Tree::inOrder(Node *root)
     cout << root->data << " ";
     inOrder(root->right);
 }
-int Tree::sizeofTree(Node *root)
+int Tree::heightofTree(Node *root)
 {
     if (root == nullptr)
     {
         return 0;
     }
-    return 1 + sizeofTree(root->left) + sizeofTree(root->right);
+    return 1 + max(heightofTree(root->left), heightofTree(root->right));
 }
 int main(int argc, const char *argv[])
 {
@@ -72,7 +72,7 @@ int main(int argc, const char *argv[])
     std::cout << "In-order => ";
     t.inOrder(t.getRoot());
     cout << endl;
-    cout << "Size of Tree => " << t.sizeofTree(t.getRoot()) << endl;
+    cout << "Height of Tree => " << t.heightofTree(t.getRoot()) << endl;
 
     return 0;
 }
