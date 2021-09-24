@@ -3,9 +3,10 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Height of Binary Tree
+//  Question: Root to leaf Sum Binary Tree
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 struct Node
@@ -27,7 +28,7 @@ public:
     Node *getRoot() { return mpRoot; }
     void inOrder(Node *);
     void createTree();
-    int heightofTree(Node *);
+    bool sumBinaryTree(Node *, std::vector<int> &, int);
 };
 Tree::Tree() : mpRoot(nullptr)
 {
@@ -54,25 +55,64 @@ void Tree::inOrder(Node *root)
     cout << root->data << " ";
     inOrder(root->right);
 }
-int Tree::heightofTree(Node *root)
+bool Tree::sumBinaryTree(Node *root, std::vector<int> &vec, int sum)
 {
     if (root == nullptr)
     {
-        return 0;
+        return false;
     }
-    return 1 + max(heightofTree(root->left), heightofTree(root->right));
+    if (root->left == nullptr && root->right == nullptr)
+    {
+        if (root->data == sum)
+        {
+            vec.push_back(root->data);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if (sumBinaryTree(root->left, vec, sum - root->data))
+    {
+        vec.push_back(root->data);
+        return true;
+    }
+    if (sumBinaryTree(root->right, vec, sum - root->data))
+    {
+        vec.push_back(root->data);
+        return true;
+    }
+    return false;
 }
+
 int main(int argc, const char *argv[])
 {
     // insert code here...
-    std::cout << "Compare Two Tree\n";
+    std::cout << "Root to leaf Sum Binary Tree\n";
+
     Tree t;
     t.createTree();
 
     std::cout << "In-order => ";
     t.inOrder(t.getRoot());
     cout << endl;
-    cout << "Height of Tree => " << t.heightofTree(t.getRoot()) << endl;
-
+    std::vector<int> vec;
+    int sum = 0;
+    cout << "Enter sum to check " << endl;
+    cin >> sum;
+    if (t.sumBinaryTree(t.getRoot(), vec, sum))
+    {
+        cout << "Yes .. Sum Binary Tree and Path is ...";
+        for (auto i : vec)
+        {
+            cout << i << " ";
+        }
+        cout << endl;
+    }
+    else
+    {
+        cout << "No .. Sum Binary Tree" << endl;
+    }
     return 0;
 }
