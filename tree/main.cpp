@@ -3,7 +3,7 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Root to leaf Sum Binary Tree
+//  Question: Cheak Binary Tree is Binary Search Tree.
 
 #include <iostream>
 #include <vector>
@@ -28,7 +28,7 @@ public:
     Node *getRoot() { return mpRoot; }
     void inOrder(Node *);
     void createTree();
-    bool sumBinaryTree(Node *, std::vector<int> &, int);
+    bool checkBST(Node *, int, int);
 };
 Tree::Tree() : mpRoot(nullptr)
 {
@@ -55,35 +55,17 @@ void Tree::inOrder(Node *root)
     cout << root->data << " ";
     inOrder(root->right);
 }
-bool Tree::sumBinaryTree(Node *root, std::vector<int> &vec, int sum)
+bool Tree::checkBST(Node *root, int min, int max)
 {
     if (root == nullptr)
     {
+        return true;
+    }
+    if (root->data < min || root->data > max)
+    {
         return false;
     }
-    if (root->left == nullptr && root->right == nullptr)
-    {
-        if (root->data == sum)
-        {
-            vec.push_back(root->data);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    if (sumBinaryTree(root->left, vec, sum - root->data))
-    {
-        vec.push_back(root->data);
-        return true;
-    }
-    if (sumBinaryTree(root->right, vec, sum - root->data))
-    {
-        vec.push_back(root->data);
-        return true;
-    }
-    return false;
+    return checkBST(root->left, min, root->data) && checkBST(root->right, root->data, max);
 }
 
 int main(int argc, const char *argv[])
@@ -97,22 +79,14 @@ int main(int argc, const char *argv[])
     std::cout << "In-order => ";
     t.inOrder(t.getRoot());
     cout << endl;
-    std::vector<int> vec;
-    int sum = 0;
-    cout << "Enter sum to check " << endl;
-    cin >> sum;
-    if (t.sumBinaryTree(t.getRoot(), vec, sum))
+
+    if (t.checkBST(t.getRoot(), INT_MIN, INT_MAX))
     {
-        cout << "Yes .. Sum Binary Tree and Path is ...";
-        for (auto i : vec)
-        {
-            cout << i << " ";
-        }
-        cout << endl;
+        cout << "Yes .. BST" << endl;
     }
     else
     {
-        cout << "No .. Sum Binary Tree" << endl;
+        cout << "No .. BST" << endl;
     }
     return 0;
 }
