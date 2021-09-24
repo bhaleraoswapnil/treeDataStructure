@@ -3,10 +3,10 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Cheak Binary Tree is Binary Search Tree.
+//  Question: Tree level order traversal
 
 #include <iostream>
-#include <vector>
+#include <queue>
 using namespace std;
 
 struct Node
@@ -28,7 +28,7 @@ public:
     Node *getRoot() { return mpRoot; }
     void inOrder(Node *);
     void createTree();
-    bool checkBST(Node *, int, int);
+    void level_order_traversal(Node *);
 };
 Tree::Tree() : mpRoot(nullptr)
 {
@@ -40,7 +40,6 @@ void Tree::createTree()
     mpRoot->left->left = new Node(-10);
     mpRoot->left->right = new Node(0);
     mpRoot->left->right->right = new Node(5);
-
     mpRoot->right = new Node(30);
     mpRoot->right->right = new Node(36);
 }
@@ -55,19 +54,31 @@ void Tree::inOrder(Node *root)
     cout << root->data << " ";
     inOrder(root->right);
 }
-bool Tree::checkBST(Node *root, int min, int max)
+
+void Tree::level_order_traversal(Node *root)
 {
+    std::queue<Node *> q;
     if (root == nullptr)
     {
-        return true;
+        return;
     }
-    if (root->data < min || root->data > max)
+    q.push(root);
+    while (!q.empty())
     {
-        return false;
+        Node *temp = q.front();
+        q.pop();
+        cout << temp->data << " ";
+        if (temp->left != nullptr)
+        {
+            q.push(temp->left);
+        }
+        if (temp->right != nullptr)
+        {
+            q.push(temp->right);
+        }
     }
-    return checkBST(root->left, min, root->data) && checkBST(root->right, root->data, max);
+    cout<<endl;
 }
-
 int main(int argc, const char *argv[])
 {
     // insert code here...
@@ -79,14 +90,7 @@ int main(int argc, const char *argv[])
     std::cout << "In-order => ";
     t.inOrder(t.getRoot());
     cout << endl;
+    t.level_order_traversal(t.getRoot());
 
-    if (t.checkBST(t.getRoot(), INT_MIN, INT_MAX))
-    {
-        cout << "Yes .. BST" << endl;
-    }
-    else
-    {
-        cout << "No .. BST" << endl;
-    }
     return 0;
 }
