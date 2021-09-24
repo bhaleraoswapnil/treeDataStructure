@@ -3,7 +3,7 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Search key in Binary Search Tree (BST).
+//  Question: Same Tree
 
 #include <iostream>
 using namespace std;
@@ -21,19 +21,18 @@ class Tree
 {
 private:
     Node *mpRoot;
-    void createTree();
-
 public:
     Tree();
     Node *getRoot() { return mpRoot; }
     void inOrder(Node *);
-    bool keySearch(Node *, int);
+    bool sameTree(Node *, Node *);
+    void createTree1();
+    void createTree2();
 };
 Tree::Tree() : mpRoot(nullptr)
 {
-    createTree();
 }
-void Tree::createTree()
+void Tree::createTree1()
 {
     mpRoot = new Node(10);
     mpRoot->left = new Node(-5);
@@ -43,6 +42,29 @@ void Tree::createTree()
 
     mpRoot->right = new Node(30);
     mpRoot->right->right = new Node(36);
+}
+void Tree::createTree2()
+{
+//    create not same tree
+//    mpRoot = new Node(10);
+//    mpRoot->left = new Node(-5);
+//    mpRoot->left->left = new Node(-10);
+//    mpRoot->left->right = new Node(0);
+//    mpRoot->left->right->right = new Node(5);
+//
+//    mpRoot->right = new Node(30);
+//    mpRoot->right->left = new Node(15);
+//    mpRoot->right->right = new Node(36);
+    
+    mpRoot = new Node(10);
+    mpRoot->left = new Node(-5);
+    mpRoot->left->left = new Node(-10);
+    mpRoot->left->right = new Node(0);
+    mpRoot->left->right->right = new Node(5);
+
+    mpRoot->right = new Node(30);
+    mpRoot->right->right = new Node(36);
+    
 }
 void Tree::inOrder(Node *root)
 {
@@ -54,44 +76,40 @@ void Tree::inOrder(Node *root)
     cout << root->data << " ";
     inOrder(root->right);
 }
-bool Tree::keySearch(Node *root, int key)
+
+bool Tree::sameTree(Node *root1, Node *root2)
 {
-    if (root == nullptr)
-    {
-        return false;
-    }
-    if (root->data == key)
+    if (root1 == nullptr && root2 == nullptr)
     {
         return true;
     }
-    else if (root->data > key)
+    if (root1 == nullptr || root2 == nullptr)
     {
-        return keySearch(root->left, key);
+        return false;
     }
-    else
-    {
-        return keySearch(root->right, key);
-    }
-    return false;
+
+    return (root1->data == root2->data) && sameTree(root1->left, root2->left) && sameTree(root1->right, root2->right);
 }
 int main(int argc, const char *argv[])
 {
     // insert code here...
-    std::cout << "Hello, World!\n";
-    Tree t;
+    std::cout << "Compare Two Tree\n";
+    Tree t1, t2;
+    t1.createTree1();
+    t2.createTree2();
     std::cout << "In-order => ";
-    t.inOrder(t.getRoot());
+    t1.inOrder(t1.getRoot());
+    std::cout << "\nIn-order => ";
+    t2.inOrder(t2.getRoot());
     cout << endl;
-    cout << "Enter key to be searched " << endl;
-    int key = 0;
-    cin >> key;
-    if (t.keySearch(t.getRoot(), key))
+    if (t1.sameTree(t1.getRoot(), t2.getRoot()))
     {
-        cout << "Key Found in BST" << endl;
+        cout << "Both Tree's are same" << endl;
     }
     else
     {
-        cout << "Key Not Found in BST" << endl;
+        cout << "Tree's are not same" << endl;
     }
+
     return 0;
 }
