@@ -3,10 +3,11 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//
+//  Question: Search key in Binary Search Tree (BST).
 
 #include <iostream>
 using namespace std;
+
 struct Node
 {
     Node *left;
@@ -25,9 +26,8 @@ private:
 public:
     Tree();
     Node *getRoot() { return mpRoot; }
-    void preOrder(Node *);
-    void postOrder(Node *);
     void inOrder(Node *);
+    bool keySearch(Node *, int);
 };
 Tree::Tree() : mpRoot(nullptr)
 {
@@ -36,12 +36,13 @@ Tree::Tree() : mpRoot(nullptr)
 void Tree::createTree()
 {
     mpRoot = new Node(10);
-    mpRoot->left = new Node(2);
-    mpRoot->left->left = new Node(6);
+    mpRoot->left = new Node(-5);
+    mpRoot->left->left = new Node(-10);
+    mpRoot->left->right = new Node(0);
+    mpRoot->left->right->right = new Node(5);
 
-    mpRoot->right = new Node(5);
-    mpRoot->right->left = new Node(8);
-    mpRoot->right->right = new Node(3);
+    mpRoot->right = new Node(30);
+    mpRoot->right->right = new Node(36);
 }
 void Tree::inOrder(Node *root)
 {
@@ -53,29 +54,26 @@ void Tree::inOrder(Node *root)
     cout << root->data << " ";
     inOrder(root->right);
 }
-
-void Tree::preOrder(Node *root)
+bool Tree::keySearch(Node *root, int key)
 {
     if (root == nullptr)
     {
-        return;
+        return false;
     }
-    cout << root->data << " ";
-    preOrder(root->left);
-    preOrder(root->right);
-}
-
-void Tree::postOrder(Node *root)
-{
-    if (root == nullptr)
+    if (root->data == key)
     {
-        return;
+        return true;
     }
-    postOrder(root->left);
-    postOrder(root->right);
-    cout << root->data << " ";
+    else if (root->data > key)
+    {
+        return keySearch(root->left, key);
+    }
+    else
+    {
+        return keySearch(root->right, key);
+    }
+    return false;
 }
-
 int main(int argc, const char *argv[])
 {
     // insert code here...
@@ -84,14 +82,16 @@ int main(int argc, const char *argv[])
     std::cout << "In-order => ";
     t.inOrder(t.getRoot());
     cout << endl;
-    
-    std::cout << "Pre-order => ";
-    t.preOrder(t.getRoot());
-    cout << endl;
-    
-    std::cout << "Post-order => ";
-    t.postOrder(t.getRoot());
-    cout << endl;
-
+    cout << "Enter key to be searched " << endl;
+    int key = 0;
+    cin >> key;
+    if (t.keySearch(t.getRoot(), key))
+    {
+        cout << "Key Found in BST" << endl;
+    }
+    else
+    {
+        cout << "Key Not Found in BST" << endl;
+    }
     return 0;
 }
