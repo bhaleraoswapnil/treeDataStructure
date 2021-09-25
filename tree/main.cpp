@@ -3,10 +3,11 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Tree level order traversal
+//  Question: Tree level order traversal in reverse.
 
 #include <iostream>
 #include <queue>
+#include <stack>
 using namespace std;
 
 struct Node
@@ -29,6 +30,7 @@ public:
     void inOrder(Node *);
     void createTree();
     void level_order_traversal(Node *);
+    void level_order_traversal_reverse(Node *);
 };
 Tree::Tree() : mpRoot(nullptr)
 {
@@ -77,7 +79,36 @@ void Tree::level_order_traversal(Node *root)
             q.push(temp->right);
         }
     }
-    cout<<endl;
+    cout << endl;
+}
+void Tree::level_order_traversal_reverse(Node *root)
+{
+    std::stack<int> st;
+    std::queue<Node *> q;
+    if (root == nullptr)
+    {
+        return;
+    }
+    q.push(root);
+    while (!q.empty())
+    {
+        Node *temp = q.front();
+        q.pop();
+        st.push(temp->data);
+        if (temp->right != nullptr)
+        {
+            q.push(temp->right);
+        }
+        if (temp->left != nullptr)
+        {
+            q.push(temp->left);
+        }
+    }
+    while (!st.empty())
+    {
+        cout << st.top() << " ";
+        st.pop();
+    }
 }
 int main(int argc, const char *argv[])
 {
@@ -91,6 +122,7 @@ int main(int argc, const char *argv[])
     t.inOrder(t.getRoot());
     cout << endl;
     t.level_order_traversal(t.getRoot());
+    t.level_order_traversal_reverse(t.getRoot());
 
     return 0;
 }
