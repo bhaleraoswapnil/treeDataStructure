@@ -3,7 +3,7 @@
 //  tree
 //
 //  Created by Swapnil Bhalerao on 18/09/21.
-//  Question: Tree level order traversal in spiral order.
+//  Question: Lowest common Ancester in Binary Search Tree (BST).
 
 #include <iostream>
 #include <queue>
@@ -29,10 +29,9 @@ public:
     Node *getRoot() { return mpRoot; }
     void inOrder(Node *);
     void createTree();
-    void level_order_traversal(Node *);
-    void level_order_traversal_reverse(Node *);
-    void level_order_traversal_spiral(Node *);
+    Node *lowestCommonAncester(Node *, int, int);
 };
+
 Tree::Tree() : mpRoot(nullptr)
 {
 }
@@ -58,121 +57,40 @@ void Tree::inOrder(Node *root)
     inOrder(root->right);
 }
 
-void Tree::level_order_traversal(Node *root)
+Node *Tree::lowestCommonAncester(Node *root, int a, int b)
 {
-    std::queue<Node *> q;
     if (root == nullptr)
     {
-        return;
+        return nullptr;
     }
-    q.push(root);
-    while (!q.empty())
+    if (root->data > a && root->data > b)
     {
-        Node *temp = q.front();
-        q.pop();
-        cout << temp->data << " ";
-        if (temp->left != nullptr)
-        {
-            q.push(temp->left);
-        }
-        if (temp->right != nullptr)
-        {
-            q.push(temp->right);
-        }
+        return lowestCommonAncester(root->left, a, b);
     }
-    cout << endl;
+    else if (root->data < a && root->data < b)
+    {
+        return lowestCommonAncester(root->right, a, b);
+    }
+    else
+    {
+        return root;
+    }
 }
-void Tree::level_order_traversal_reverse(Node *root)
-{
-    std::stack<int> st;
-    std::queue<Node *> q;
-    if (root == nullptr)
-    {
-        return;
-    }
-    q.push(root);
-    while (!q.empty())
-    {
-        Node *temp = q.front();
-        q.pop();
-        st.push(temp->data);
-        if (temp->right != nullptr)
-        {
-            q.push(temp->right);
-        }
-        if (temp->left != nullptr)
-        {
-            q.push(temp->left);
-        }
-    }
-    while (!st.empty())
-    {
-        cout << st.top() << " ";
-        st.pop();
-    }
-    cout << endl;
-}
-void Tree::level_order_traversal_spiral(Node *root)
-{
-    if (root == nullptr)
-    {
-        return;
-    }
-    std::stack<Node *> st1;
-    std::stack<Node *> st2;
-    st1.push(root);
-    while (!st1.empty() || !st2.empty())
-    {
-        while (!st1.empty())
-        {
-            Node *temp = st1.top();
-            st1.pop();
-            cout << temp->data << " ";
-            if (temp->left)
-            {
-                st2.push(temp->left);
-            }
-            if (temp->right)
-            {
-                st2.push(temp->right);
-            }
-        }
 
-        while (!st2.empty())
-        {
-            Node *temp = st2.top();
-            st2.pop();
-            cout << temp->data << " ";
-            if (temp->right)
-            {
-                st1.push(temp->right);
-            }
-            if (temp->left)
-            {
-                st1.push(temp->left);
-            }
-        }
-    }
-}
 int main(int argc, const char *argv[])
 {
     // insert code here...
-    std::cout << "Root to leaf Sum Binary Tree\n";
-
     Tree t;
     t.createTree();
 
     std::cout << "In-order => ";
     t.inOrder(t.getRoot());
     cout << endl;
-    cout << "order_traversal: ";
-    t.level_order_traversal(t.getRoot());
 
-    cout << "order_traversal_reverse: ";
-    t.level_order_traversal_reverse(t.getRoot());
-
-    cout << "order_traversal_spiral: ";
-    t.level_order_traversal_spiral(t.getRoot());
-    cout << endl;
+    cout << "Enter Two nodes" << endl;
+    int a, b;
+    cin >> a >> b;
+    Node *commonAncester = t.lowestCommonAncester(t.getRoot(), a, b);
+    cout << "Lowest common Ancester == " << commonAncester->data << endl;
     return 0;
 }
